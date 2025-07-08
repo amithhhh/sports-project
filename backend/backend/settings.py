@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%^&03&rv*58-fzvb#=uw^d+bd0hat1^3(b!=w5ya2sg5_#l_%x'
+SECRET_KEY = 'django-insecure-9c4$ry44!!(_ei#z@g_u2kks5rzvr19+24%z9b8hrg5ua=+r*j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,22 +31,23 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
+    'django.contrib.sites',
+    'rest_framework',
+    'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'users'
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'users',
+    'rest_framework.authtoken',
+    
 ]
 
 MIDDLEWARE = [
@@ -58,8 +59,28 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
+
+SITE_ID = 1
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -133,15 +154,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-SITE_ID = 1
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
-ACCOUNT_LOGIN_METHOD = {'username', 'email'}
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_UNIQUE_EMAIL = True
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
-
-CORS_ALLOWED_CREDENTIALS = True

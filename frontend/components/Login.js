@@ -1,4 +1,4 @@
-import { MainContainer, TitleHead, AuthButton, SignInBox, SignInComponent, Description, StyledInput } from "../login/page";
+import { MainContainer, TitleHead, AuthButton, SignInBox, SignInComponent, Description, StyledInput } from "@/components/Register";
 import { registerFields } from "@/constants/constants";
 import { Box } from "@mui/material";
 import { LinkedIn, Facebook, Google } from '@mui/icons-material';
@@ -8,7 +8,7 @@ const Register = () => {
     return (
         <MainContainer>
             <Box>
-                <TitleHead>Create Account</TitleHead>
+                <TitleHead>Sign in to SmartSports</TitleHead>
             </Box>
             <SignInBox>
                 <SignInComponent><Google /></SignInComponent>
@@ -16,7 +16,7 @@ const Register = () => {
                 <SignInComponent><LinkedIn /></SignInComponent>
             </SignInBox>
             <Box>
-                <Description>Use your email for registrations.</Description>
+                <Description>Or use your Email Account</Description>
             </Box>
             <Box sx={{
                 width: '100%',
@@ -47,7 +47,7 @@ const Register = () => {
                             }} key={index} />
                     ))
                 }
-                <AuthButton fullWidth>Sign Up</AuthButton>
+                <AuthButton fullWidth>Sign In</AuthButton>
             </Box>
 
         </MainContainer>

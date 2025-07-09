@@ -1,6 +1,6 @@
 'use client'
 import { Box, Typography, Container } from '@mui/material';
-import { borderColor, styled } from '@mui/system';
+import { styled } from '@mui/system';
 import { LinkedIn, Facebook, Google } from '@mui/icons-material';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -19,7 +19,10 @@ export const TitleHead = styled(Typography)(({ theme }) => ({
     fontSize: '3rem',
     fontWeight: 'bold',
     fontFamily: 'Roboto',
-    color: "#20C997"
+    color: "#20C997",
+    [theme.breakpoints.down("sm")]: {
+        fontSize: "2rem"
+    }
 }))
 
 export const SignInBox = styled(Box)(({ theme }) => ({

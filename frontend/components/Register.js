@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { inputFields } from '@/constants/constants';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter } from "next/navigation";
 
 export const MainContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
@@ -83,6 +85,33 @@ export const AuthButton = styled('button')(({ theme }) => ({
 }));
 
 const Login = () => {
+    let state = false;
+    const router = useRouter();
+    const { register } = useAuthStore();
+    const [userData, setUserData] = useState({
+        username: '',
+        email: '',
+        password1: '',
+        password2: ''
+    })
+    const [success, setSuccess] = useState('');
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUserData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        state = await register(userData);
+        if (state) {
+            router.push("/")
+        }
+    }
+
     return (
         <MainContainer>
             <Box>
@@ -107,11 +136,14 @@ const Login = () => {
                 boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
                 gap: '1rem'
 
-            }}>
-                {
+            }} component='form' onSubmit={handleSubmit}>
+                    {
                     inputFields.map((item, index) => (
                         <StyledInput
+                            key={index}
+                            name={item.name}
                             type={item.type}
+                            value={userData[item.name]}
                             placeholder={item.placeholder} variant="outlined"
                             fullWidth
                             slotProps={{
@@ -122,7 +154,10 @@ const Login = () => {
                                         </InputAdornment>
                                     )
                                 }
-                            }} key={index} />
+                            }}
+                             required
+                             onChange={handleChange}
+                             />
                     ))
                 }
                 <AuthButton fullWidth>Sign Up</AuthButton>

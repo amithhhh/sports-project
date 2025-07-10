@@ -14,20 +14,20 @@ export const inputFields = [
     icon: <Email />
   },
   {
-    name: 'password',
+    name: 'password1',
     placeholder: 'Password',
     type: 'password',
     icon: <Lock />
   },
   {
-    name: 'password',
+    name: 'password2',
     placeholder: 'Retype Password',
     type: 'password',
     icon: <Lock />
   }
 ];
 
-export const registerFields = [
+export const loginFields = [
   {
     name: 'username',
     placeholder: 'Username',

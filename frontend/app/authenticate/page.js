@@ -3,6 +3,7 @@ import { Box, Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
+import Link from 'next/link';
 
 const AuthenticatePage = () => {
 
@@ -31,7 +32,10 @@ const AuthenticatePage = () => {
                         justifyContent: 'center',
                         'alignItems': 'center',
                         transition: 'transform 0.6s ease',
-                        transform: isSignIn ? 'translateX(0%)' : 'translateX(100%)',
+                        transform: {
+                            sm: isSignIn ? 'translateX(0%)' : 'translateX(100%)',
+                            xs: 'none'
+                        },
                         zIndex: 1
                     }}
                 >
@@ -51,6 +55,7 @@ const AuthenticatePage = () => {
                     >
                         {isSignIn ? 'SIGN UP' : 'SIGN IN'}
                     </Button>
+
                 </Box>
                 <Box sx={{
                     width: {
@@ -61,16 +66,32 @@ const AuthenticatePage = () => {
                     backgroundColor: 'white',
                     display: 'flex',
                     justifyContent: 'center',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     padding: 4,
                     transition: 'transform 0.6s ease',
-                    transform: isSignIn ? 'translateX(0%)' : 'translateX(-100%)',
+                    transform: {
+                        sm: isSignIn ? 'translateX(0%)' : 'translateX(-100%)',
+                        xs: 'none'
+                    },
                     zIndex: 2,
                 }}>
                     {isSignIn ? <Login /> : <Register />}
+                                                    <Typography sx={{
+                                    color: '#20C997',
+                                    display: {
+                                        sm: "none",
+                                        xs: "block"
+                                    },
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() =>(setIsSignIn((prev) => !prev))}
+                                >{isSignIn ? "Don't have an account ?" : "Already Have an Account ?"}</Typography>
                     
                 </Box>
+               
             </Box>
+
     )
 }
 

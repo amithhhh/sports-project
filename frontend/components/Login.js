@@ -7,8 +7,9 @@ import { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 
-const Register = () => {
+const Login = () => {
     let state = false;
+    const router = useRouter();
     const { login, getUser, user } = useAuthStore();
     const [userData, setUserData] = useState({
             username: '',
@@ -28,7 +29,7 @@ const Register = () => {
             e.preventDefault();
             state = await login(userData);
             if (state) {
-                Router.push('/');
+                router.push('/');
             }
         }
     
@@ -81,7 +82,7 @@ const Register = () => {
                                          />
                                 ))
                             }
-                            <AuthButton fullWidth>Sign Up</AuthButton>
+                            <AuthButton fullWidth>Sign in</AuthButton>
                         </Box>
             
 
@@ -89,4 +90,4 @@ const Register = () => {
     )
 }
 
-export default Register;
+export default Login;

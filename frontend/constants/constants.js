@@ -41,3 +41,19 @@ export const loginFields = [
     icon: <Lock />
   }
 ];
+
+
+export const navbarItems = [
+  {
+    name: 'shop',
+    path: '/shopping'
+  },
+  {
+    name: 'settings',
+    path: '/settings'
+  },
+  {
+    name: 'orders',
+    path: '/orders'
+  }
+]

@@ -7,31 +7,69 @@ import { styled } from "@mui/system";
 import { Box, Container, Typography, Button } from "@mui/material";
 // import {shoeImage} from '@/assets/images/shoe.png'
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 
-const MainBox = styled(Box)(({theme}) => ({
+
+const MainBox = styled(Box)(({ theme }) => ({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'row',
-  padding: 2,
-  
-}))
+  padding: theme.spacing(2),
+  zIndex: 1, // Ensure content is above overlay
+  overflow: 'hidden',
+
+  // Responsive
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column',
+    padding: 0,
+    height: "39rem",
+      '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: 'url("/background.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    opacity: 0.8, // Controls image visibility
+    zIndex: -1, // Put behind content
+  },
+  },
+
+  // Pseudo-element for background overlay
+
+}));
+
+
 
 const ContentBox = styled(Container)(({theme}) => ({
   display: "flex",
   flexDirection: "column",
-  backgroundColor: "#20C997",
+ backgroundColor: "#20C997",
   margin: 0,
   width: "60%",
   height: "38rem",
   padding: "10% 20% 10%",
-  gap: 10
+  gap: 10,
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    maxWidth: "100%",
+    height: "auto",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    padding: "20% 15% 20% 10%"
+  }
 }))
 const TitleName = styled(Typography)(({ theme }) => ({
     fontSize: '3rem',
     fontWeight: 'bold',
     color: "#fff",
     [theme.breakpoints.down("sm")]: {
-        fontSize: "1.5rem"
+        fontSize: "2rem"
     }
 }))
 
@@ -45,17 +83,14 @@ export default function Home() {
         checkUser(token);
       }
   },[checkUser]);
-
+  const router = useRouter();
   return (
       <MainBox>
         <ContentBox>
-          <TitleName>Boost Your Performance with</TitleName>
-          <TitleName sx={{
-            marginBottom: 1
-          }}>Smart Sports</TitleName>
+          <TitleName>Boost Your Performance with Smart Sports</TitleName>
           <Typography sx={{
             color: "#fff",
-            fontSize: "1rem"
+            fontSize: "1.5rem"
           }}>
             Discover the latest technology in sports equipment and gear designed to elevate your game
           </Typography>
@@ -68,6 +103,7 @@ export default function Home() {
                         borderColor: '#20C997',
                         borderRadius: "45px",
                     }}
+                    onClick={() => router.push("/predict")}
                 >
                     Scan Image
                 </Button>
@@ -75,9 +111,19 @@ export default function Home() {
         <Box sx={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+                      display: {
+              xs: 'none',
+              lg: 'block'
+            },
+            height: {
+              lg: '38rem',
+              xs: "12rem"
+            },
         }}>
-          <Image src="/shoe.png" alt="alt text" width={650} height={500} />
+          <Image src="/shoe.png" alt="alt text" width={650} height={500} sx={{
+
+          }} />
         </Box>
       </MainBox>
   );

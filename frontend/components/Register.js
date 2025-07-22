@@ -44,6 +44,7 @@ export const SignInComponent = styled(Box)(({ theme }) => ({
     'alignItems': 'center',
     borderRadius: "70%",
     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+    cursor: 'pointer'
 }))
 
 export const Description = styled(Typography)(({ theme }) => ({

@@ -102,6 +102,7 @@ export default function Home() {
                         backgroundColor: "#fff",
                         borderColor: '#20C997',
                         borderRadius: "45px",
+                        fontWeight: "1rem"
                     }}
                     onClick={() => router.push("/predict")}
                 >

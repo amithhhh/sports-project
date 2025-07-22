@@ -57,13 +57,13 @@ class BallClassifierModel(nn.Module):
 
 # Load model
 model = BallClassifierModel()
-modelPath = os.path.join(settings.BASE_DIR, 'predict', 'sample.pth')
+modelPath = os.path.join(settings.BASE_DIR, 'predict', 'models', 'sample.pth')
 model.load_state_dict(torch.load(modelPath, map_location=torch.device('cpu')))
 model.eval()  # Set to evaluation mode
 
 # Prediction function
 def predictBallType(image):  # image: PIL.Image
-    img = image.convert('RGB')
+    img = Image.open(image.file).convert('RGB')
     transformed = testTransforms(img).unsqueeze(0)
     with torch.no_grad():
         output = model(transformed)

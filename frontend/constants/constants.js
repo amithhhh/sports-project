@@ -1,5 +1,6 @@
 import { Email, Person, Lock } from '@mui/icons-material';
 
+
 export const inputFields = [
   {
     name: 'username',

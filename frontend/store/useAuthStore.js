@@ -80,4 +80,9 @@ export const useAuthStore = create((set, get) => ({
       set({ isLogin: false });
     }
   },
+  logout: async () => {
+    set({ isLogin: true, error: "" });
+    Cookies.remove('authToken')
+    window.location.reload();
+  }
 }));

@@ -1,5 +1,5 @@
 "use client";
-import { useAuthRedirect } from "@/hooks/usAuthRedirect";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
@@ -8,6 +8,8 @@ import { Box, Container, Typography, Button } from "@mui/material";
 // import {shoeImage} from '@/assets/images/shoe.png'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useSyncUser } from "@/hooks/useSyncUser";
 
 
 
@@ -75,8 +77,9 @@ const TitleName = styled(Typography)(({ theme }) => ({
 
 
 export default function Home() {
-  useAuthRedirect();
   const { checkUser, authUser } = useAuthStore();
+  useSyncUser();
+  //useAuthRedirect();
   useEffect(() => {
       const token = Cookies.get('authToken');
       if (token) {

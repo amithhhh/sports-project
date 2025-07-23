@@ -54,7 +54,7 @@ export const navbarItems = [
     path: '/settings'
   },
   {
-    name: 'orders',
-    path: '/orders'
-  }
+    name: 'carts',
+    path: '/carts'
+  },
 ]

@@ -41,9 +41,9 @@ const Login = () => {
                 <TitleHead>Sign in to SmartSports</TitleHead>
             </Box>
             <SignInBox>
-                <SignInComponent onClick={() => signIn("google", {callbackUrl: "/"})}><Google /></SignInComponent>
-                <SignInComponent onClick={() => signIn("facebook", {callbackUrl: "/"})}><Facebook /></SignInComponent>
-                <SignInComponent onClick={() => signIn("spotify", {callbackUrl: "/"})}><LinkedIn /></SignInComponent>
+                <SignInComponent onClick={() => signIn("google", {callbackUrl: '/'})}><Google /></SignInComponent>
+                <SignInComponent onClick={() => signIn("facebook", {callbackUrl: '/'})}><Facebook /></SignInComponent>
+                <SignInComponent onClick={() => signIn("linkedin", {callbackUrl: '/'})}><LinkedIn /></SignInComponent>
             </SignInBox>
             <Box>
                 <Description>Or use your Email Account</Description>

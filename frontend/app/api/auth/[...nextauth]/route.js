@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from 'next-auth/providers/facebook';
-import SpotifyProvider from 'next-auth/providers/spotify';
+import LinkedInProvider from 'next-auth/providers/linkedin';
+import Cookies from 'js-cookie';
 
 
 
@@ -15,9 +16,9 @@ export const authOptions = {
             clientId: process.env.FACEBOOK_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET
         }),
-        SpotifyProvider({
-            clientId: process.env.SPOTIFY_CLIENT_ID,
-            clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+        LinkedInProvider({
+            clientId: process.env.LINKEDIN_CLIENT_ID,
+            clientSecret: process.env.LINKEDIN_CLIENT_SECRET
         })
 
     ],
@@ -30,7 +31,12 @@ export const authOptions = {
         },
         async session({ session, token }) {
             session.id_token = token.id_token;
-            console.log(session);
+            // console.log(session.id_token)
+            Cookies.set("otherToken", session.id_token, {
+                    expires: 7,
+                    secure: true,
+                    sameSite: "lax",
+                  });
             return session;
         }
     },

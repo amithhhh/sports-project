@@ -15,7 +15,7 @@ export const MainContainer = styled(Container)(({ theme }) => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: '3rem',
-    gap: '1rem'
+    gap: '1rem',
 }))
 export const TitleHead = styled(Typography)(({ theme }) => ({
     fontSize: '3rem',

@@ -83,7 +83,7 @@ export const useAuthStore = create((set, get) => ({
   logout: async () => {
     set({ isLogin: true, error: "" });
     Cookies.remove('authToken')
-    window.location.reload();
+    
   },
   setToken: async (backendToken, session) => {
     set({authUser: session.user.email.split("@")[0]})

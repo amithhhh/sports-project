@@ -109,7 +109,12 @@ function Navbar() {
             <Link key={index} href={item.path}>
               <Typography sx={{
                 color: "#20C997",
-                fontSize: '1.2rem'
+                fontSize: '1.2rem',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  textDecoration: 'underline', // or 'none' for no underline
+                  transform: 'scale(1.05)', // optional slight zoom effect
+                },
               }}>
                 {item.name}
               </Typography>

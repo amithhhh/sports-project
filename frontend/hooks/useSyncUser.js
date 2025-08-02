@@ -1,19 +1,19 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import Cookies from "js-cookie";
 
 export const useSyncUser = () => {
     const [backendToken, setBackendToken] = useState('');
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const { setToken } = useAuthStore();
+    const { setToken, checkUser } = useAuthStore();
 
     useEffect(() => {
         const sendToBackend = async () => {
             if (!session) return;
             setLoading(true);
-
             try {
                 const res = await fetch("http://localhost:8001/api/user/syncuser/", {
                     method: "POST",
@@ -33,7 +33,7 @@ export const useSyncUser = () => {
                     setBackendToken(data.key)
                     console.log(backendToken)
                     setToken(data.key, session);
-                    
+
                 } else {
                     throw new Error(data.error || "Failed to send user Info")
                 }
@@ -42,12 +42,6 @@ export const useSyncUser = () => {
             } finally {
                 setLoading(false);
             }
-            const token = Cookies.get("authToken");
-                    if (token) {
-                        router.push("/");
-                    } else {
-                        router.push("/authenticate");
-                    }
         };
         sendToBackend();
     }, [session]);

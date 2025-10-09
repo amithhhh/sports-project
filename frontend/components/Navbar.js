@@ -61,7 +61,7 @@ const CustomMenuIcon = styled(MenuIcon)({
 
 
 function Navbar() {
-  const { authUser, logout } = useAuthStore();
+  const { authUser, logout, authToken } = useAuthStore();
   const router = useRouter();
   const [mobileMenu, setMobilemenu] = useState({ left: false });
   const toggleDrawer = (anchor, open) => (event) => {

@@ -8,6 +8,10 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)  
     username = models.CharField(max_length=150, unique=True)
 
+
+
+class AdditionalInfo(models.Model):
+    pass
     
 
 

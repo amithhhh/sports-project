@@ -56,3 +56,30 @@ def syncUser(request):
         "first_name": user.first_name,
         "last_name": user.last_name
     }, status=status.HTTP_200_OK)
+
+def get_user_from_token(authToken):
+    try:
+        Token.objects.get(key=authToken)
+        user = token.user
+        return user
+    except Token.DoesNotExist:
+        return None
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_info(request):
+    user = request.user
+
+    user.mobile_number = request.data.get("mobile_number")
+    user.address = request.data.get("address")
+    user.city = request.data.get("city")
+    user.state = request.data.get("state")
+    user.postal_code = request.data.get("postal_code")
+    user.country = request.data.get("country")
+    user.save()
+
+    return Response({
+        "message": "Additional Information saved successfully"
+    })
+
+

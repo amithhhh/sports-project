@@ -109,7 +109,7 @@ const Login = () => {
         e.preventDefault();
         state = await register(userData);
         if (state) {
-            router.push("/")
+            router.push("/additional-info/")
         }
     }
 

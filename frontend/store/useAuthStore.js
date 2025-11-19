@@ -93,5 +93,8 @@ export const useAuthStore = create((set, get) => ({
         secure: true,
         sameSite: "lax",
       });
+  },
+  additionalData: async (add_Data) => {
+    
   }
 }));

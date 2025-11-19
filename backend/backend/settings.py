@@ -164,4 +164,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
 AUTH_USER_MODEL = 'users.CustomUser'

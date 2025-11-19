@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
 import React, { useState } from "react";
+import axios from "axios";
 import {
   TextField,
   Button,
@@ -9,25 +10,51 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import Cookies from "js-cookie";
 
 export default function AddInfo() {
   const [formData, setFormData] = useState({
-    mobile: "",
+    mobile_number: "",
     address: "",
     city: "",
-    postalCode: "",
+    postal_code: "",
     state: "",
     country: "",
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Saved Info:", formData);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const token = Cookies.get("authToken");
+
+    const response = await axios.post(
+      "http://127.0.0.1:8001/api/user/add-data/",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,  // <--- FIXED
+        },
+      }
+    );
+
+    console.log("Saved:", response.data);
+    alert("Profile updated successfully!");
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Failed to update info!");
+  }
+};
+
 
   return (
     <Paper
@@ -52,8 +79,8 @@ export default function AddInfo() {
         <TextField
           fullWidth
           label="Mobile Number"
-          name="mobile"
-          value={formData.mobile}
+          name="mobile_number"
+          value={formData.mobile_number}
           onChange={handleChange}
           margin="normal"
         />
@@ -84,8 +111,8 @@ export default function AddInfo() {
             <TextField
               fullWidth
               label="Postal Code"
-              name="postalCode"
-              value={formData.postalCode}
+              name="postal_code"
+              value={formData.postal_code}
               onChange={handleChange}
             />
           </Grid>

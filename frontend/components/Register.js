@@ -107,11 +107,14 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        state = await register(userData);
-        if (state) {
-            router.push("/additional-info/")
+
+        const result = await register(userData);  // ✔ no reserved keyword
+
+        if (result) {
+            router.push("/additional-info/");
         }
-    }
+};
+
 
     return (
         <MainContainer>

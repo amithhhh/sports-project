@@ -8,6 +8,11 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth import get_user_model
+#from rest_framework.decorators import api_view, permission_classes
+#from rest_framework.permissions import IsAuthenticated
+#from rest_framework.response import Response
+#from rest_framework import status
+from .serializers import UserUpdateSerializer
 
 User = get_user_model()
 
@@ -69,17 +74,15 @@ def get_user_from_token(authToken):
 @permission_classes([IsAuthenticated])
 def update_info(request):
     user = request.user
+    serializer = UserUpdateSerializer(user, data=request.data, partial=True)  
+    # partial=True → only update fields provided
 
-    user.mobile_number = request.data.get("mobile_number")
-    user.address = request.data.get("address")
-    user.city = request.data.get("city")
-    user.state = request.data.get("state")
-    user.postal_code = request.data.get("postal_code")
-    user.country = request.data.get("country")
-    user.save()
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {"message": "Additional Information saved successfully"},
+            status=status.HTTP_200_OK
+        )
 
-    return Response({
-        "message": "Additional Information saved successfully"
-    })
-
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

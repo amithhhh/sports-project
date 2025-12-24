@@ -47,7 +47,7 @@ export const loginFields = [
 export const navbarItems = [
   {
     name: 'shop',
-    path: '/shopping'
+    path: '/products'
   },
   {
     name: 'settings',

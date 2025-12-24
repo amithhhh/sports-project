@@ -6,7 +6,8 @@ import BoxSx from '@/components/UploadBox';
 
 function page() {
   return (
-    <MainContainer>
+    <MainContainer sx={{
+    }}>
       <TitleHead>Upload the Image</TitleHead>
       <BoxSx />
     </MainContainer>

@@ -1,152 +1,122 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Grid, Rating } from "@mui/material";
 import { styled } from "@mui/system";
 
-const Container = styled(Box)(({ theme }) => ({
-    width: "100%",
-    padding: "2rem",
-    display: "flex",
-    justifyContent: "center",
-}));
+const BASE_URL = "http://127.0.0.1:8001";
 
-const ImageSection = styled(Box)(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-}));
+const Container = styled(Box)({
+  width: "100%",
+  padding: "2rem",
+  display: "flex",
+  justifyContent: "center",
+});
 
-const MainImage = styled("img")(({ theme }) => ({
-    width: "450px",
-    height: "450px",
-    objectFit: "contain",
-    borderRadius: "10px",
-    boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
-    backgroundColor: "#fff",
+const ImageSection = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+});
 
-    [theme.breakpoints.down("sm")]: {
-        width: "300px",
-        height: "300px",
-    },
-}));
+const MainImage = styled("img")({
+  width: "450px",
+  height: "450px",
+  objectFit: "contain",
+  borderRadius: "10px",
+  boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+  backgroundColor: "#fff",
+});
 
-const ThumbnailRow = styled(Box)(({ theme }) => ({
-    display: "flex",
-    gap: "1rem",
-}));
+const DetailsSection = styled(Box)({
+  padding: "1rem 2rem",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  maxWidth: "500px",
+});
 
-const Thumbnail = styled("img")(({ selected }) => ({
-    width: "70px",
-    height: "70px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    border: selected ? "3px solid #20C997" : "2px solid #ddd",
-    objectFit: "cover",
-    transition: "0.2s ease",
-}));
+const Price = styled(Typography)({
+  fontSize: "2rem",
+  fontWeight: "bold",
+  color: "#20C997",
+});
 
-const DetailsSection = styled(Box)(({ theme }) => ({
-    padding: "1rem 2rem",
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    maxWidth: "500px",
-}));
+export default function ProductsDetails({ productId }) {
+  const [product, setProduct] = useState(null);
 
-const Price = styled(Typography)(({ theme }) => ({
-    fontSize: "2rem",
-    fontWeight: "bold",
-    color: "#20C997",
-}));
+  useEffect(() => {
+    if (!productId) return;
 
-const ActionButton = styled(Button)(({ theme }) => ({
-    padding: "0.75rem",
-    borderRadius: "8px",
-    fontWeight: "bold",
-    textTransform: "none",
-    fontSize: "1rem",
-}));
+    fetch(`${BASE_URL}/api/products/${productId}/`)
+      .then(res => res.json())
+      .then(data => setProduct(data))
+      .catch(err => console.error("Failed to load product", err));
+  }, [productId]);
 
-export default function ProductsDetails() {
-
-    // Demo product
-    const product = {
-        name: "Premium Football",
-        description:
-            "High-quality stitched football suitable for all weather conditions. Perfect for training and matches.",
-        price: 1299,
-        rating: 4.4,
-        images: [
-            "/images/ball1.jpg",
-            "/images/ball2.jpg",
-            "/images/ball3.jpg",
-            "/images/ball4.jpg",
-        ],
-    };
-
-    const [selectedImage, setSelectedImage] = useState(product.images[0]);
-
+  if (!product) {
     return (
-        <Container>
-
-            <Grid container spacing={4}>
-
-                {/* LEFT SECTION: IMAGES */}
-                <Grid item xs={12} md={6}>
-                    <ImageSection>
-                        <MainImage src={selectedImage} alt="product" />
-
-                        <ThumbnailRow>
-                            {product.images.map((img, i) => (
-                                <Thumbnail
-                                    key={i}
-                                    src={img}
-                                    selected={img === selectedImage}
-                                    onClick={() => setSelectedImage(img)}
-                                />
-                            ))}
-                        </ThumbnailRow>
-                    </ImageSection>
-                </Grid>
-
-                {/* RIGHT SECTION: DETAILS */}
-                <Grid item xs={12} md={6}>
-                    <DetailsSection>
-                        <Typography variant="h4" fontWeight="bold">
-                            {product.name}
-                        </Typography>
-
-                        <Rating
-                            value={product.rating}
-                            readOnly
-                            precision={0.5}
-                            size="medium"
-                        />
-
-                        <Price>₹{product.price}</Price>
-
-                        <Typography color="gray">
-                            {product.description}
-                        </Typography>
-
-                        <Box sx={{ display: "flex", gap: "1rem", mt: 2 }}>
-                            <ActionButton
-                                variant="contained"
-                                sx={{ backgroundColor: "#20C997", "&:hover": { backgroundColor: "#17b089" } }}
-                            >
-                                Add to Cart
-                            </ActionButton>
-
-                            <ActionButton variant="outlined" sx={{ borderColor: "#20C997", color: "#20C997" }}>
-                                Buy Now
-                            </ActionButton>
-                        </Box>
-                    </DetailsSection>
-                </Grid>
-
-            </Grid>
-
-        </Container>
+      <Container>
+        <Typography>Loading product...</Typography>
+      </Container>
     );
+  }
+
+  return (
+    <Container>
+      <Grid container spacing={4}>
+
+        {/* IMAGE */}
+        <Grid item xs={12} md={6}>
+          <ImageSection>
+            <MainImage
+              src={product.image}
+              alt={product.name}
+            />
+          </ImageSection>
+        </Grid>
+
+        {/* DETAILS */}
+        <Grid item xs={12} md={6}>
+          <DetailsSection>
+
+            <Typography variant="h4" fontWeight="bold">
+              {product.name}
+            </Typography>
+
+            <Rating value={4.5} readOnly />
+
+            <Price>₹{product.price}</Price>
+
+            <Typography color="gray">
+              {product.description || "No description available"}
+            </Typography>
+
+            <Box sx={{ display: "flex", gap: "1rem", mt: 2 }}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#20C997",
+                  "&:hover": { backgroundColor: "#17b089" },
+                }}
+              >
+                Add to Cart
+              </Button>
+
+              <Button
+                variant="outlined"
+                sx={{
+                  borderColor: "#20C997",
+                  color: "#20C997",
+                }}
+              >
+                Buy Now
+              </Button>
+            </Box>
+
+          </DetailsSection>
+        </Grid>
+
+      </Grid>
+    </Container>
+  );
 }

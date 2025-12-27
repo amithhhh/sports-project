@@ -3,16 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography, Button, CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
+/* ---------- STYLES ---------- */
 
-
-const Container = styled(Box)(({ theme }) => ({
+const Container = styled(Box)(() => ({
     width: "100%",
     padding: "2rem",
 }));
 
-const ProductCard = styled(Box)(({ theme }) => ({
+const ProductCard = styled(Box)(() => ({
     backgroundColor: "#fff",
     borderRadius: "10px",
     padding: "1rem",
@@ -27,7 +27,7 @@ const ProductCard = styled(Box)(({ theme }) => ({
     }
 }));
 
-const ProductImage = styled("img")(({ theme }) => ({
+const ProductImage = styled("img")(() => ({
     width: "100%",
     height: "200px",
     objectFit: "contain",
@@ -35,13 +35,13 @@ const ProductImage = styled("img")(({ theme }) => ({
     backgroundColor: "#f9f9f9",
 }));
 
-const Price = styled(Typography)(({ theme }) => ({
+const Price = styled(Typography)(() => ({
     fontWeight: "bold",
     color: "#20C997",
     fontSize: "1.2rem",
 }));
 
-const ViewButton = styled(Button)(({ theme }) => ({
+const ViewButton = styled(Button)(() => ({
     marginTop: "0.5rem",
     padding: "0.5rem",
     borderRadius: "6px",
@@ -54,24 +54,33 @@ const ViewButton = styled(Button)(({ theme }) => ({
     },
 }));
 
+/* ---------- CONFIG ---------- */
+
 const API_BASE_URL = "http://127.0.0.1:8001";
+
+/* ---------- COMPONENT ---------- */
 
 export default function ProductsPage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const router = useRouter();
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const searchQuery = searchParams.get("search") || "";
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/products/`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch products");
-                }
+                const url = searchQuery
+                    ? `${API_BASE_URL}/api/products/?search=${searchQuery}`
+                    : `${API_BASE_URL}/api/products/`;
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Failed to fetch products");
+
                 const data = await response.json();
-                console.log(data)
+                console.log(data);
                 setProducts(data);
             } catch (err) {
                 setError(err.message);
@@ -81,12 +90,12 @@ export default function ProductsPage() {
         };
 
         fetchProducts();
-    }, []);
+    }, [searchQuery]);
 
     return (
         <Container>
             <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>
-                Products
+                Products {searchQuery && `— "${searchQuery}"`}
             </Typography>
 
             {loading && (
@@ -106,9 +115,7 @@ export default function ProductsPage() {
                     <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
                         <ProductCard>
                             <ProductImage
-                                src={
-                                    product.image
-                                }
+                                src={product.image}
                                 alt={product.name}
                             />
 
@@ -118,7 +125,9 @@ export default function ProductsPage() {
 
                             <Price>₹{product.price}</Price>
 
-                            <ViewButton onClick={() => router.push(`/products/${product.id}`)}>
+                            <ViewButton
+                                onClick={() => router.push(`/products/${product.id}`)}
+                            >
                                 View Details
                             </ViewButton>
                         </ProductCard>

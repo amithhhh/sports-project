@@ -1,11 +1,14 @@
 'use client'
 
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, InputBase, IconButton, Badge } from "@mui/material";
 import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import RoomOutlined from "@mui/icons-material/RoomOutlined";
+import { useRouter } from "next/navigation";
+
+/* ---------- STYLES ---------- */
 
 const Navbar = styled(Box)(({ theme }) => ({
     width: "100%",
@@ -15,28 +18,20 @@ const Navbar = styled(Box)(({ theme }) => ({
     alignItems: "center",
     justifyContent: "space-between",
     gap: "1rem",
-    boxSizing: "border-box",
-    [theme.breakpoints.down('sm')]: {
-        padding: "0.5rem",
-        flexWrap: "wrap",
-    }
 }));
 
-const Brand = styled(Typography)(({ theme }) => ({
+const Brand = styled(Typography)(() => ({
     color: "#fff",
     fontSize: "1.5rem",
     fontWeight: "bold",
-    fontFamily: "Roboto",
     whiteSpace: "nowrap",
 }));
 
-const LocationBox = styled(Box)(({ theme }) => ({
+const LocationBox = styled(Box)(() => ({
     display: "flex",
     alignItems: "center",
     gap: "5px",
     color: "#fff",
-    fontFamily: "Roboto",
-    fontWeight: 500,
     fontSize: "0.9rem",
     whiteSpace: "nowrap",
 }));
@@ -49,23 +44,17 @@ const SearchContainer = styled(Box)(({ theme }) => ({
     flex: 1,
     padding: "2px 10px",
     maxWidth: "450px",
-    [theme.breakpoints.down('sm')]: {
-        order: 3,
-        width: "100%",
-        marginTop: "8px",
-    },
 }));
 
-const SearchInput = styled(InputBase)(({ theme }) => ({
+const SearchInput = styled(InputBase)(() => ({
     flex: 1,
     padding: "5px",
     fontSize: "0.9rem",
 }));
 
-const NavItem = styled(Typography)(({ theme }) => ({
+const NavItem = styled(Typography)(() => ({
     color: "#fff",
     fontSize: "0.95rem",
-    fontFamily: "Roboto",
     cursor: "pointer",
     whiteSpace: "nowrap",
     "&:hover": {
@@ -73,34 +62,42 @@ const NavItem = styled(Typography)(({ theme }) => ({
     },
 }));
 
+/* ---------- COMPONENT ---------- */
+
 export default function Productsnavbar() {
+    const router = useRouter();
+    const [query, setQuery] = useState("");
+
+    const handleSearch = () => {
+        if (!query.trim()) return;
+        router.push(`/products?search=${encodeURIComponent(query)}`);
+    };
+
     return (
         <Navbar>
-            
-            {/* Logo */}
+
             <Brand>Smart Sports</Brand>
 
-            {/* Delivering Location */}
             <LocationBox>
                 <RoomOutlined fontSize="small" />
                 Delivering to Kannur 670006
             </LocationBox>
 
-            {/* Search Bar */}
             <SearchContainer>
-                <SearchInput placeholder="Search products..." />
-                <IconButton type="button">
+                <SearchInput
+                    placeholder="Search products..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+                <IconButton onClick={handleSearch}>
                     <SearchIcon />
                 </IconButton>
             </SearchContainer>
 
-            {/* Sign In */}
             <NavItem>Hello, Sign in</NavItem>
-
-            {/* Orders */}
             <NavItem>Returns & Orders</NavItem>
 
-            {/* Cart */}
             <IconButton sx={{ color: "#fff" }}>
                 <Badge badgeContent={2} color="error">
                     <ShoppingCartOutlined />

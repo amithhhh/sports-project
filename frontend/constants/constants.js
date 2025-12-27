@@ -55,6 +55,6 @@ export const navbarItems = [
   },
   {
     name: 'carts',
-    path: '/carts'
+    path: '/cart'
   },
 ]

@@ -32,6 +32,7 @@ const MainBox = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     padding: 0,
     minHeight: "39rem",
+    backgroundColor: '',
     '&::before': {
       content: '""',
       position: 'absolute',

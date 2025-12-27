@@ -11,6 +11,7 @@ import {
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 
 const theme = createTheme({
   palette: {
@@ -224,7 +225,7 @@ export default function BoxSx() {
                 lineHeight: 1.6
               }}
             >
-              {result}
+              <Link href={`products/?search=${result}`}>{result}</Link>
             </Typography>
 
             <Button

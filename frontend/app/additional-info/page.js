@@ -11,8 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function AddInfo() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     mobile_number: "",
     address: "",
@@ -48,6 +50,7 @@ export default function AddInfo() {
 
     console.log("Saved:", response.data);
     alert("Profile updated successfully!");
+    router.push("/")
 
   } catch (error) {
     console.error("Error:", error);

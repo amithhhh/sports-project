@@ -23,7 +23,9 @@ def getUser(request):
     return Response({
         "id": user.id,
         "username": user.username,
-        "email": user.email
+        "email": user.email,
+        "city": user.city,
+        "pincode":user.postal_code
     })
 
 @api_view(['POST'])

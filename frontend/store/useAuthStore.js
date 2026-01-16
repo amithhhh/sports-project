@@ -6,19 +6,22 @@ const BACKEND_URL = "http://127.0.0.1:8001";
 
 export const useAuthStore = create((set, get) => ({
   // ---------- STATE ----------
-  isLogin: false,        // for loading during login/register
-  isLoggedIn: false,     // true if user is logged in
-  authUser: null,        // user info
-  token: Cookies.get("authToken") || null,
+  isLogin: false,
+  isLoggedIn: false,
+  authUser: null,
+  token: Cookies.get("authToken") || null, // only for initial hydration
   error: "",
 
   // ---------- ACTIONS ----------
 
-  // Login user
+  // 🔐 Login user
   login: async (credentials) => {
     set({ isLogin: true, error: "" });
 
     try {
+      // clear any stale token first
+      Cookies.remove("authToken");
+
       const authRes = await axios.post(
         `${BACKEND_URL}/api/auth/login/`,
         credentials,
@@ -27,12 +30,18 @@ export const useAuthStore = create((set, get) => ({
 
       const { key: token } = authRes.data;
 
-      // Save token to cookie and state
-      Cookies.set("authToken", token, { expires: 7, secure: true, sameSite: "lax" });
+      // persist token
+      Cookies.set("authToken", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "lax",
+      });
+
+      // set state FIRST
       set({ token, isLoggedIn: true });
 
-      // Fetch user info immediately
-      await get().checkUser(token);
+      // fetch user using STATE token
+      await get().checkUser();
 
       return true;
     } catch (err) {
@@ -46,11 +55,13 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Register user
+  // 📝 Register user
   register: async (credentials) => {
     set({ isLogin: true, error: "" });
 
     try {
+      Cookies.remove("authToken");
+
       const authRes = await axios.post(
         `${BACKEND_URL}/api/auth/register/`,
         credentials,
@@ -59,12 +70,15 @@ export const useAuthStore = create((set, get) => ({
 
       const { key: token } = authRes.data;
 
-      // Save token to cookie and state
-      Cookies.set("authToken", token, { expires: 7, secure: true, sameSite: "lax" });
+      Cookies.set("authToken", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "lax",
+      });
+
       set({ token, isLoggedIn: true });
 
-      // Fetch user info immediately
-      await get().checkUser(token);
+      await get().checkUser();
 
       return true;
     } catch (err) {
@@ -78,19 +92,21 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Logout user
+  // 🚪 Logout user
   logout: () => {
-    Cookies.remove("authToken");
+    Cookies.remove("authToken", { path: "/" });
     set({
       token: null,
       authUser: null,
       isLoggedIn: false,
+      error: "",
     });
   },
 
-  // Fetch user info based on token (defaults to cookie)
-  checkUser: async (keyValue) => {
-    const token = keyValue || Cookies.get("authToken");
+  // 👤 Fetch authenticated user (STATE ONLY)
+  checkUser: async () => {
+    const token = get().token;
+
     if (!token) {
       set({ authUser: null, isLoggedIn: false });
       return;
@@ -104,15 +120,29 @@ export const useAuthStore = create((set, get) => ({
         },
       });
 
-      set({ authUser: res.data, token, isLoggedIn: true });
+      set({
+        authUser: res.data,
+        isLoggedIn: true,
+      });
+
+      console.log("Authenticated as:", res.data.username);
     } catch (err) {
-      set({ authUser: null, error: err.response?.data?.detail || err.message, isLoggedIn: false });
+      // token invalid / expired
+      Cookies.remove("authToken");
+      set({
+        token: null,
+        authUser: null,
+        isLoggedIn: false,
+        error: err.response?.data?.detail || err.message,
+      });
     }
   },
 
-  // Utility: manually set token (optional)
-  setToken: (backendToken, sessionUser) => {
-    Cookies.set("authToken", backendToken, { expires: 7, secure: true, sameSite: "lax" });
-    set({ token: backendToken, authUser: sessionUser, isLoggedIn: true });
+  // 🔁 Hydrate token on app load
+  hydrateAuth: () => {
+    const token = Cookies.get("authToken");
+    if (token) {
+      set({ token });
+    }
   },
 }));

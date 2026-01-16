@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, InputBase, IconButton, Badge } from "@mui/material";
 import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 import RoomOutlined from "@mui/icons-material/RoomOutlined";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
 
 /* ---------- STYLES ---------- */
 
@@ -67,6 +68,10 @@ const NavItem = styled(Typography)(() => ({
 export default function Productsnavbar() {
     const router = useRouter();
     const [query, setQuery] = useState("");
+    const { authUser, checkUser } = useAuthStore();
+    useEffect(() => {
+        checkUser();
+    }, [checkUser]);
 
     const handleSearch = () => {
         if (!query.trim()) return;
@@ -80,7 +85,7 @@ export default function Productsnavbar() {
 
             <LocationBox>
                 <RoomOutlined fontSize="small" />
-                Delivering to Kannur 670006
+                Delivering to {authUser?.city} {authUser?.pincode}
             </LocationBox>
 
             <SearchContainer>
@@ -95,10 +100,10 @@ export default function Productsnavbar() {
                 </IconButton>
             </SearchContainer>
 
-            <NavItem>Hello, Sign in</NavItem>
+            <NavItem>Hello, {authUser ? authUser.username : "Sign in"}</NavItem>
             <NavItem>Returns & Orders</NavItem>
 
-            <IconButton sx={{ color: "#fff" }}>
+            <IconButton sx={{ color: "#fff" }} onClick={() => router.push("/cart")}>
                 <Badge badgeContent={2} color="error">
                     <ShoppingCartOutlined />
                 </Badge>
